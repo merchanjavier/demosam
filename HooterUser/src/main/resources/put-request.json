@@ -1,0 +1,33 @@
+{
+  "resource": "/user",
+  "path": "/user",
+  "httpMethod": "PUT",
+  "headers": null,
+  "multiValueHeaders": null,
+  "queryStringParameters": null,
+  "multiValueQueryStringParameters": null,
+  "pathParameters": null,
+  "stageVariables": null,
+  "requestContext": {
+    "path": "/user/{userId}",
+    "accountId": "146494513950",
+    "resourceId": "rk5je4",
+    "stage": "test-invoke-stage",
+    "domainPrefix": "testPrefix",
+    "requestId": "06641c2a-61f0-11e9-9d6c-f15b631733b7",
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "cognitoIdentityId": null,
+      "apiKey": "test-invoke-api-key",
+      "cognitoAuthenticationType": null,
+      "userArn": "arn:aws:sts::146494513950:assumed-role/Admin/javier.merchan@cloudreach.com",
+      "apiKeyId": "test-invoke-api-key-id",
+      "userAgent": "aws-internal/3 aws-sdk-java/1.11.498 Linux/4.9.137-0.1.ac.218.74.329.metal1.x86_64 OpenJDK_64-Bit_Server_VM/25.202-b08 java/1.8.0_202",
+      "accountId": "146494513950",
+      "caller": "AROAJZ2YBCON2QUWG4MEY:javier.merchan@cloudreach.com",
+      "sourceIp": "test-invoke-source-ip",
+      "accessKey": "ASIASEG6A4MPGKAXDMUO"
+    }
+  },
+  "body": "{\"userId\": \"nairo\", \"UserName\": \"Nairo Quintana\"}"
+}
