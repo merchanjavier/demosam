@@ -1,21 +1,18 @@
 # AWS
 
-This is a sample template for AWS - Below is a brief explanation of what we have generated for you:
-
 ```bash
 ├── README.md                                   <-- This instructions file
-├── HelloWorldFunction                          <-- Source for HelloWorldFunction Lambda Function
+├── HooterUser                                  <-- Source for HooterUser Lambda Functions
 │   ├── pom.xml                                 <-- Java dependencies
 │   └── src
 │       ├── main
 │       │   └── java
-│       │       └── helloworld
-│       │           ├── App.java                <-- Lambda function code
-│       │           └── GatewayResponse.java    <-- POJO for API Gateway Responses object 
-│       └── test                                <-- Unit tests
-│           └── java
-│               └── helloworld
-│                   └── AppTest.java
+│       │       └── com.javier.merchan.hooter.user
+│       │           ├── UserHandler.java        <-- Lambda functions code
+│       │           └── User.java               <-- POJO for User entity
+│       └── resources                           <-- Sample requests
+│           ├── get-request.json
+│           └── put-request.json
 └── template.yaml
 ```
 
@@ -55,11 +52,16 @@ If the previous command ran successfully you should now be able to hit the follo
 ```yaml
 ...
 Events:
-    HelloWorld:
+    GetUser:
         Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
         Properties:
-            Path: /hello
+            Path: /user/{userId}
             Method: get
+    PutUser:
+        Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        Properties:
+            Path: /user
+            Method: put
 ```
 
 ## Packaging and deployment
@@ -68,11 +70,17 @@ AWS Lambda Java runtime accepts either a zip file or a standalone JAR file - We 
 
 ```yaml
 ...
-    HelloWorldFunction:
+    GetUserFunction:
         Type: AWS::Serverless::Function
         Properties:
-            CodeUri: target/HelloWorld-1.0.jar
-            Handler: helloworld.App::handleRequest
+            CodeUri: HooterUser
+            Handler: com.javier.merchan.hooter.user.UserHandler::handleRequest
+
+    PutUserFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: HooterUser
+            Handler: com.javier.merchan.hooter.user.UserHandler::putUser
 ```
 
 Firstly, we need a `S3 bucket` where we can upload our Lambda functions packaged as ZIP before we deploy anything - If you don't have a S3 bucket to store code artifacts then this is a good time to create one:
@@ -113,7 +121,7 @@ aws cloudformation describe-stacks \
 We use `JUnit` for testing our code and you can simply run the following command to run our tests:
 
 ```bash
-cd HelloWorldFunction
+cd HooterUser
 mvn test
 ```
 
