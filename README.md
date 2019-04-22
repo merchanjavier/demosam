@@ -74,13 +74,13 @@ AWS Lambda Java runtime accepts either a zip file or a standalone JAR file - We 
         Type: AWS::Serverless::Function
         Properties:
             CodeUri: HooterUser
-            Handler: com.javier.merchan.hooter.user.UserHandler::handleRequest
+            Handler: UserHandler::handleRequest
 
     PutUserFunction:
         Type: AWS::Serverless::Function
         Properties:
             CodeUri: HooterUser
-            Handler: com.javier.merchan.hooter.user.UserHandler::putUser
+            Handler: UserHandler::putUser
 ```
 
 Firstly, we need a `S3 bucket` where we can upload our Lambda functions packaged as ZIP before we deploy anything - If you don't have a S3 bucket to store code artifacts then this is a good time to create one:

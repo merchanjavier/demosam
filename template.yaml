@@ -19,27 +19,11 @@ Resources:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
 
-  GetUserFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: HooterUser
-      Handler: com.javier.merchan.hooter.user.UserHandler::handleRequest
-      Runtime: java8
-      Events:
-        PutUser:
-          Type: Api
-          Properties:
-            Path: /user/{userId}
-            Method: get
-      Role: !GetAtt
-        - UsersLambdaRole
-        - Arn
-
   PutUserFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: HooterUser
-      Handler: com.javier.merchan.hooter.user.UserHandler::putUser
+      Handler: demosam.user.UserHandler::handleRequest
       Runtime: java8
       Events:
         PutUser:
@@ -47,6 +31,22 @@ Resources:
           Properties:
             Path: /user
             Method: put
+      Role: !GetAtt
+        - UsersLambdaRole
+        - Arn
+
+  GetUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: HooterUser
+      Handler: demosam.user.UserHandler::getUser
+      Runtime: java8
+      Events:
+        PutUser:
+          Type: Api
+          Properties:
+            Path: /user/{userId}
+            Method: get
       Role: !GetAtt
         - UsersLambdaRole
         - Arn

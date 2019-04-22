@@ -1,4 +1,4 @@
-package com.javier.merchan.hooter.user;
+package demosam.user;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -12,10 +12,14 @@ import java.util.Map;
 
 public class UserHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
     DynamoDBMapper mapper = new DynamoDBMapper(AmazonDynamoDBClientBuilder.standard().build());
-    Gson gson = new Gson();
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
+        mapper.save(new Gson().fromJson(request.getBody(), User.class));
+        return new APIGatewayProxyResponseEvent().withBody(request.getBody()).withStatusCode(201);
+    }
+
+    public APIGatewayProxyResponseEvent getUser(APIGatewayProxyRequestEvent request, Context context) {
         Map<String, String> pathParameters = request.getPathParameters();
         if (pathParameters == null) {
             return new APIGatewayProxyResponseEvent().withStatusCode(400);
@@ -27,11 +31,6 @@ public class UserHandler implements RequestHandler<APIGatewayProxyRequestEvent, 
             return new APIGatewayProxyResponseEvent().withStatusCode(404);
         }
 
-        return new APIGatewayProxyResponseEvent().withBody(gson.toJson(user)).withStatusCode(200);
-    }
-
-    public APIGatewayProxyResponseEvent putUser(APIGatewayProxyRequestEvent request, Context context) {
-        mapper.save(gson.fromJson(request.getBody(), User.class));
-        return new APIGatewayProxyResponseEvent().withBody(request.getBody()).withStatusCode(201);
+        return new APIGatewayProxyResponseEvent().withBody(new Gson().toJson(user)).withStatusCode(200);
     }
 }

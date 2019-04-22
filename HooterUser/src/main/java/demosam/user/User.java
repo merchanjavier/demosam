@@ -1,4 +1,4 @@
-package com.javier.merchan.hooter.user;
+package demosam.user;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
