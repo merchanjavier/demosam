@@ -1,95 +1,36 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  Template for the hooter-user microservice
+  Template for the SAM demo meetup micro service
 Globals:
   Function:
     Timeout: 20
     MemorySize: 512
+    CodeUri: Meetup
 
 Resources:
-  UsersTable:
+  PutAttendeeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: java8
+      Handler: demosam.meetup.AttendeeHandler::handleRequest
+      Events:
+        PutAttendee:
+          Type: Api
+          Properties:
+            Path: /meetup
+            Method: put
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: Attendees
+
+  AttendeesTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: Users
+      TableName: Attendees
       PrimaryKey:
-        Name: userId
+        Name: email
         Type: String
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
-
-  PutUserFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: HooterUser
-      Handler: demosam.user.UserHandler::handleRequest
-      Runtime: java8
-      Events:
-        PutUser:
-          Type: Api
-          Properties:
-            Path: /user
-            Method: put
-      Role: !GetAtt
-        - UsersLambdaRole
-        - Arn
-
-  GetUserFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: HooterUser
-      Handler: demosam.user.UserHandler::getUser
-      Runtime: java8
-      Events:
-        PutUser:
-          Type: Api
-          Properties:
-            Path: /user/{userId}
-            Method: get
-      Role: !GetAtt
-        - UsersLambdaRole
-        - Arn
-
-  UsersLambdaRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
-
-  UsersLambdaPolicy:
-    Type: AWS::IAM::ManagedPolicy
-    Properties:
-      Roles:
-        - !Ref UsersLambdaRole
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Action:
-              - dynamodb:GetItem
-              - dynamodb:DeleteItem
-              - dynamodb:PutItem
-              - dynamodb:Scan
-              - dynamodb:Query
-              - dynamodb:UpdateItem
-              - dynamodb:BatchWriteItem
-              - dynamodb:BatchGetItem
-              - dynamodb:DescribeTable
-            Resource: !GetAtt
-              - UsersTable
-              - Arn
-          - Effect: Allow
-            Action:
-              - logs:CreateLogGroup
-              - logs:CreateLogStream
-              - logs:PutLogEvents
-            Resource:
-              - arn:aws:logs:*:*:*

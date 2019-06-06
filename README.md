@@ -1,19 +1,22 @@
 # AWS
 
 ```bash
-├── README.md                                   <-- This instructions file
-├── HooterUser                                  <-- Source for HooterUser Lambda Functions
-│   ├── pom.xml                                 <-- Java dependencies
+├── README.md                                     <-- This instructions file
+├── Meetup                                        <-- Source for Meetup Lambda Functions
+│   ├── pom.xml                                   <-- Java dependencies
 │   └── src
 │       ├── main
-│       │   └── java
-│       │       └── com.javier.merchan.hooter.user
-│       │           ├── UserHandler.java        <-- Lambda functions code
-│       │           └── User.java               <-- POJO for User entity
-│       └── resources                           <-- Sample requests
-│           ├── get-request.json
-│           └── put-request.json
-└── template.yaml
+│       │   ├── java
+│       │   │   └── demosam.meetup
+│       │   │       ├── AttendeeHandler.java      <-- Lambda functions code
+│       │   │       └── Attendee.java             <-- POJO for Attendee entity
+│       │   └───resources                         <-- Sample requests
+│       │       └── put-request.json
+│       └── test
+│           └── java
+│               └── demosam.meetup
+│                   └── AttendeeHandlerTest.java  <-- Integration test
+└── template.yaml                                 <-- Infrastructure description
 ```
 
 ## Requirements
@@ -52,15 +55,10 @@ If the previous command ran successfully you should now be able to hit the follo
 ```yaml
 ...
 Events:
-    GetUser:
-        Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+    PutAttendee:
+        Type: Api
         Properties:
-            Path: /user/{userId}
-            Method: get
-    PutUser:
-        Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-        Properties:
-            Path: /user
+            Path: /meetup
             Method: put
 ```
 
@@ -70,17 +68,11 @@ AWS Lambda Java runtime accepts either a zip file or a standalone JAR file - We 
 
 ```yaml
 ...
-    GetUserFunction:
+    PutAttendeeFunction:
         Type: AWS::Serverless::Function
         Properties:
-            CodeUri: HooterUser
-            Handler: UserHandler::handleRequest
-
-    PutUserFunction:
-        Type: AWS::Serverless::Function
-        Properties:
-            CodeUri: HooterUser
-            Handler: UserHandler::putUser
+            CodeUri: Meetup
+            Handler: demosam.meetup.AttendeeHandler::handleRequest
 ```
 
 Firstly, we need a `S3 bucket` where we can upload our Lambda functions packaged as ZIP before we deploy anything - If you don't have a S3 bucket to store code artifacts then this is a good time to create one:
@@ -121,7 +113,7 @@ aws cloudformation describe-stacks \
 We use `JUnit` for testing our code and you can simply run the following command to run our tests:
 
 ```bash
-cd HooterUser
+cd Meetup
 mvn test
 ```
 
@@ -146,15 +138,3 @@ sam deploy \
 aws cloudformation describe-stacks \
     --stack-name aws --query 'Stacks[].Outputs'
 ```
-
-## Bringing to the next level
-
-Here are a few ideas that you can use to get more acquainted as to how this overall process works:
-
-* Create an additional API resource (e.g. /hello/{proxy+}) and return the name requested through this new path
-* Update unit test to capture that
-* Package & Deploy
-
-Next, you can use the following resources to know more about beyond hello world samples and how others structure their Serverless applications:
-
-* [AWS Serverless Application Repository](https://aws.amazon.com/serverless/serverlessrepo/)
