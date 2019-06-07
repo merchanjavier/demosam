@@ -32,6 +32,3 @@ Resources:
       PrimaryKey:
         Name: email
         Type: String
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
