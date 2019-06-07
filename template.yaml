@@ -23,6 +23,7 @@ Resources:
       Policies:
         - DynamoDBCrudPolicy:
             TableName: Attendees
+      Tracing: Active
 
   AttendeesTable:
     Type: AWS::Serverless::SimpleTable
