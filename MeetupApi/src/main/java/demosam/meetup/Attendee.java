@@ -6,10 +6,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName = "Attendees")
 public class Attendee {
+    @DynamoDBHashKey
     private String email;
+    @DynamoDBAttribute
     private String name;
 
-    @DynamoDBHashKey
     public String getEmail() {
         return email;
     }
@@ -18,7 +19,6 @@ public class Attendee {
         this.email = email;
     }
 
-    @DynamoDBAttribute
     public String getName() {
         return name;
     }
